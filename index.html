@@ -5,25 +5,25 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>tidepool</title>
 
-<!-- vintage + modern font pairing -->
+<!-- font stack: gothic masthead + body serif -->
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Spectral:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&family=Spectral:wght@300;400&display=swap" rel="stylesheet">
 
 <style>
-/* ---------- palette ---------- */
+/* ---- palette ---- */
 :root{
-  --bg      : #f7f1e3;
+  --bg      : #f8f3e7;
   --ink     : #463626;
-  --ink-soft: #625244;
+  --ink-soft: #6b594b;
   --accent  : #b9956f;
   --border  : #d7c9b8;
-  --grey    : #7a7a7a;
+  --grey    : #787878;
 }
 
 /* reset */
 *,::before,::after{margin:0;padding:0;box-sizing:border-box}
 
-/* ---------- base ---------- */
+/* ---- base ---- */
 body{
   font:300 16px/1.7 'Spectral', serif;
   color:var(--ink);
@@ -32,56 +32,51 @@ body{
   overflow-x:hidden;
 }
 
-/* ---------- dynamic grain layers ---------- */
-.grain{
-  position:fixed;inset:0;pointer-events:none;
+/* static vintage grain layers */
+body::before,body::after{
+  content:"";position:fixed;inset:0;pointer-events:none;
   mix-blend-mode:multiply;
-  background:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAADUlEQVR4AWOgGDBgYGBgAAAANAAB0f8XGQAAAABJRU5ErkJggg==") repeat;
-  animation: flicker 1.6s steps(2) infinite;
 }
-.grain::after{          /* faint vertical scratches */
-  content:"";position:absolute;inset:0;
-  background:repeating-linear-gradient(90deg,transparent 0 6px,rgba(255,255,255,.06) 7px 8px,transparent 9px 17px);
-  mix-blend-mode:screen;opacity:.25;
+body::before{            /* paper flecks */
+  background:
+    linear-gradient(0deg,rgba(0,0,0,.02) 50%,transparent 50%) 0 0/4px 4px,
+    radial-gradient(circle,rgba(0,0,0,.03) 1px,transparent 1px) 0 0/3px 3px;
 }
-.grain-slow{opacity:.12;filter:blur(.3px)}
-.grain-fast{opacity:.05;filter:blur(.6px)}
+body::after{             /* subtle scratches */
+  background:
+    url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAADUlEQVR4AWOgGDBgYGBgAAAANAAB0f8XGQAAAABJRU5ErkJggg==") repeat,
+    repeating-linear-gradient(90deg,transparent 0 7px,rgba(255,255,255,.05) 8px 9px,transparent 10px 18px);
+  opacity:.25;
+  filter:blur(.3px);
+}
 
-@keyframes flicker{
-  50%{opacity:.9}
-}
-
-/* ---------- cursor dust ---------- */
+/* ---- cursor dust ---- */
 #cursor-noise{
-  position:fixed;top:0;left:0;width:120px;height:120px;
-  pointer-events:none;
+  position:fixed;top:0;left:0;width:120px;height:120px;pointer-events:none;
   background:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAADUlEQVR4AWOgGDBgYGBgAAAANAAB0f8XGQAAAABJRU5ErkJggg==") repeat;
-  mix-blend-mode:multiply;
-  opacity:0;filter:blur(1px);
-  transition:opacity .15s;
+  mix-blend-mode:multiply;filter:blur(1px);opacity:0;transition:opacity .15s;
 }
 body:hover #cursor-noise{opacity:.4}
 
-/* ---------- global elems ---------- */
-a{color:inherit;text-decoration:none}
-img{max-width:100%;display:block}
-
+/* ---- layout ---- */
 .container{max-width:820px;margin:0 auto;padding:70px 32px}
 
-/* ---------- headings ---------- */
+/* ---- headings ---- */
 .title{
-  font-family:'Playfair Display',serif;font-size:3.2rem;letter-spacing:-.03em;margin-bottom:8px;
+  font-family:'UnifrakturCook',cursive;
+  font-size:3.4rem;letter-spacing:-.02em;margin-bottom:10px;
 }
 .intro{max-width:540px;font-size:1.06rem;color:var(--grey);margin-bottom:74px}
 .section-title{
-  font-family:'Playfair Display',serif;font-size:1.48rem;font-weight:600;margin:32px 0 26px;
+  font-family:'Spectral',serif;font-weight:600;font-size:1.48rem;margin:32px 0 24px;
+  text-transform:uppercase;letter-spacing:.04em;
 }
 
-/* ink fade */
+/* ink fade hover */
 p,a,.member-name,.event-name,button{transition:color .3s}
 a:hover,.member-link:hover .member-name,.event-name:hover{color:var(--ink-soft)}
 
-/* ---------- members 2 × 2 ---------- */
+/* ---- members grid ---- */
 .members-container{
   display:grid;grid-template-columns:repeat(2,1fr);gap:24px;margin-bottom:46px;
 }
@@ -92,14 +87,11 @@ a:hover,.member-link:hover .member-name,.event-name:hover{color:var(--ink-soft)}
 .member-name{font-weight:400;margin-bottom:8px}
 .member-bio{color:var(--grey);font-size:.93rem}
 
-/* ---------- gallery 2 × 2 ---------- */
+/* ---- gallery 2 × 2 ---- */
 .gallery{
-  display:grid;grid-template-columns:repeat(2,1fr);gap:22px;
-  max-width:680px;margin:50px auto 100px;
+  display:grid;grid-template-columns:repeat(2,1fr);gap:22px;max-width:680px;margin:50px auto 100px;
 }
-.photo{
-  position:relative;overflow:hidden;border-radius:10px;border:1px solid var(--border);aspect-ratio:4/3;
-}
+.photo{position:relative;overflow:hidden;border-radius:10px;border:1px solid var(--border);aspect-ratio:4/3}
 .photo img{
   width:100%;height:100%;object-fit:cover;object-position:center 55%;
   filter:sepia(.24) contrast(.88) brightness(.92) saturate(.9);
@@ -107,20 +99,24 @@ a:hover,.member-link:hover .member-name,.event-name:hover{color:var(--ink-soft)}
 }
 .photo:hover img{filter:none;transform:scale(1.06)}
 .photo::after{
-  content:"listen ↗";position:absolute;bottom:12px;right:14px;opacity:0;
-  background:rgba(0,0,0,.45);color:#fff;font:600 .8rem/1 'Spectral',serif;
-  padding:4px 8px;border-radius:4px;letter-spacing:.04em;transition:.4s;
+  content:"listen ↗";position:absolute;bottom:12px;right:14px;opacity:0;background:rgba(0,0,0,.45);
+  color:#fff;font:600 .8rem/1 'Spectral',serif;padding:4px 8px;border-radius:4px;transition:.4s;
 }
 .photo:hover::after{opacity:1}
 
-/* ---------- events ---------- */
+/* ---- bullet list section ---- */
+.bullet-list{margin-left:20px;font-size:.98rem}
+.bullet-list li{margin-bottom:8px;color:var(--grey)}
+.bullet-list li::marker{color:var(--accent)}
+
+/* ---- events ---- */
 .event-section h4{
-  font-weight:400;margin-bottom:15px;color:var(--accent);text-transform:uppercase;font-size:.9rem;letter-spacing:.05em;
+  font-weight:400;margin-bottom:15px;color:var(--accent);font-size:.9rem;letter-spacing:.05em;
 }
 .event{margin-bottom:12px;font-size:.95rem;color:var(--grey)}
 .event-name{color:var(--ink);font-weight:400}
 
-/* ---------- footer ---------- */
+/* ---- footer ---- */
 .footer{text-align:center;margin-top:130px;padding-top:52px;border-top:1px solid var(--border)}
 .email-input{
   width:240px;background:none;border:none;border-bottom:1px solid var(--border);
@@ -134,10 +130,10 @@ a:hover,.member-link:hover .member-name,.event-name:hover{color:var(--ink-soft)}
 .email-button:hover{background:rgba(0,0,0,.05);border-color:var(--accent)}
 .footer-text{color:var(--grey);font-size:.8rem;margin-top:30px}
 
-/* ---------- mobile ---------- */
+/* ---- mobile ---- */
 @media(max-width:600px){
   .container{padding:60px 22px}
-  .title{font-size:2.5rem}
+  .title{font-size:2.6rem}
   .members-container{grid-template-columns:1fr}
   .gallery{gap:16px;max-width:100%}
   .email-input{width:180px;margin-bottom:14px}
@@ -146,10 +142,6 @@ a:hover,.member-link:hover .member-name,.event-name:hover{color:var(--ink-soft)}
 </head>
 
 <body>
-
-<!-- dynamic grain layers -->
-<div class="grain grain-slow" id="grainSlow"></div>
-<div class="grain grain-fast" id="grainFast"></div>
 
 <div class="container">
 
@@ -161,9 +153,9 @@ a:hover,.member-link:hover .member-name,.event-name:hover{color:var(--ink-soft)}
 
   <!-- members -->
   <section>
-    <h2 class="section-title">who we are</h2>
+    <h2 class="section-title">who&nbsp;we&nbsp;are</h2>
     <div class="members-container">
-      <a href="https://uzpg.me" target="_blank" class="member-link">
+      <a href="https://uzpg.me"              target="_blank" class="member-link">
         <div class="member-name">uzay</div>
         <div class="member-bio">so many colors. this is making me think. fuck.</div>
       </a>
@@ -171,30 +163,40 @@ a:hover,.member-link:hover .member-name,.event-name:hover{color:var(--ink-soft)}
         <div class="member-name">kushal</div>
         <div class="member-bio">blessed are the cracked, for they let the light in.</div>
       </a>
-      <a href="https://kaivu.org" target="_blank" class="member-link">
+      <a href="https://kaivu.org"            target="_blank" class="member-link">
         <div class="member-name">kaivu</div>
         <div class="member-bio">find some time to do something</div>
       </a>
-      <a href="https://nilsand.re" target="_blank" class="member-link">
+      <a href="https://nilsand.re"           target="_blank" class="member-link">
         <div class="member-name">nils</div>
         <div class="member-bio">please don't let an adult see this website</div>
       </a>
     </div>
   </section>
 
+  <!-- NEW bullet list section -->
+  <section>
+    <h2 class="section-title">the&nbsp;essentials</h2>
+    <ul class="bullet-list">
+      <li>open-door sunsets on the roof</li>
+      <li>endless genmaicha &amp; verse</li>
+      <li>records spinning until daylight</li>
+    </ul>
+  </section>
+
   <!-- gallery -->
   <section>
     <div class="gallery">
-      <a class="photo" href="https://open.spotify.com/track/52Bg6oaos7twR7IUtEpqcE?si=c49a0aedbc5d413c" target="_blank">
+      <a class="photo" href="https://open.spotify.com/track/52Bg6oaos7twR7IUtEpqcE" target="_blank">
         <img src="/tidepool_1.webp" alt="tidepool 1">
       </a>
-      <a class="photo" href="https://open.spotify.com/track/2cGxRwrMyEAp8dEbuZaVv6?si=cd59f69a299f42ec" target="_blank">
+      <a class="photo" href="https://open.spotify.com/track/2cGxRwrMyEAp8dEbuZaVv6" target="_blank">
         <img src="/tidepool_3.jpg" alt="tidepool 3">
       </a>
-      <a class="photo" href="https://open.spotify.com/track/4ZbEaG8Hs4StrkTR1E7o90?si=bac5e4c084184602" target="_blank">
+      <a class="photo" href="https://open.spotify.com/track/4ZbEaG8Hs4StrkTR1E7o90" target="_blank">
         <img src="/tidepool_4.jpg" alt="tidepool 4">
       </a>
-      <a class="photo" href="https://open.spotify.com/track/3k49y7zmi55sp9zv531Z2M?si=f9e71c7b70ca47bf" target="_blank">
+      <a class="photo" href="https://open.spotify.com/track/3k49y7zmi55sp9zv531Z2M" target="_blank">
         <img src="/tidepool_2.jpg" alt="tidepool 2">
       </a>
     </div>
@@ -202,8 +204,7 @@ a:hover,.member-link:hover .member-name,.event-name:hover{color:var(--ink-soft)}
 
   <!-- events -->
   <section>
-    <h2 class="section-title">what we're up&nbsp;to</h2>
-
+    <h2 class="section-title">what&nbsp;we're&nbsp;up&nbsp;to</h2>
     <div class="event-section">
       <h4>chill</h4>
       <div class="event"><span class="event-name">sunday dinners</span> — shared meals cooked together</div>
@@ -216,7 +217,7 @@ a:hover,.member-link:hover .member-name,.event-name:hover{color:var(--ink-soft)}
       <h4>wild</h4>
       <div class="event"><span class="event-name">techno cave&nbsp;rave</span> — underground dance party</div>
       <div class="event"><span class="event-name">hitchhiking across california</span> — ride and die</div>
-      <div class="event"><span class="event-name">tidepooling</span> — “his own voice discovered … look from the tidepool to the stars and then back to the tidepool again.” – Steinbeck</div>
+      <div class="event"><span class="event-name">tidepooling</span> — “look from the tidepool to the stars and then back again.” – Steinbeck</div>
     </div>
   </section>
 
@@ -231,31 +232,16 @@ a:hover,.member-link:hover .member-name,.event-name:hover{color:var(--ink-soft)}
 
 </div>
 
-<!-- cursor noise blob -->
+<!-- cursor dust element -->
 <div id="cursor-noise"></div>
-
 <script>
-/* cursor dust follows pointer */
-const dust=document.getElementById('cursor-noise');
-let idle;
+const blob=document.getElementById('cursor-noise');
+let timeout;
 document.addEventListener('mousemove',e=>{
-  dust.style.transform=`translate(${e.clientX-60}px,${e.clientY-60}px)`;
-  dust.style.opacity='.4';
-  clearTimeout(idle); idle=setTimeout(()=>dust.style.opacity='0',160);
-});
-
-/* scroll-reactive grain parallax */
-const slow=document.getElementById('grainSlow');
-const fast=document.getElementById('grainFast');
-const factorSlow=0.3, factorFast=0.7;
-window.addEventListener('scroll',()=>{
-  const y=window.scrollY;
-  slow.style.transform=`translateY(${y*factorSlow}px)`;
-  fast.style.transform=`translateY(-${y*factorFast}px)`;
-  /* optional opacity pulse */
-  const pulse=(Math.sin(y/300)+1)/8;  /* 0→.25 */
-  slow.style.opacity=.12+pulse;
-  fast.style.opacity=.05+pulse/2;
+  blob.style.transform=`translate(${e.clientX-60}px,${e.clientY-60}px)`;
+  blob.style.opacity='.4';
+  clearTimeout(timeout);
+  timeout=setTimeout(()=>blob.style.opacity='0',150);
 });
 </script>
 </body>
