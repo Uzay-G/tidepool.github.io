@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" content="IE=edge">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>tidepool</title>
 
-<!--  body text + black-letter display  -->
+<!-- gothic display + body serif -->
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&family=Spectral:wght@300;400&display=swap" rel="stylesheet">
 
 <style>
-/* ---------- palette ---------- */
+/* ---------- colour palette ---------- */
 :root{
-  --bg      : #f6efe0;   /* warm parchment */
-  --ink     : #463626;   /* deep brown ink */
+  --bg      : #f6f0df;      /* parchment base */
+  --ink     : #463626;
   --ink-soft: #604c3b;
-  --accent  : #b9956f;   /* copper */
+  --accent  : #c19a71;
   --border  : #d6c8b6;
   --grey    : #7a7a7a;
 }
@@ -33,97 +33,111 @@ body{
   position:relative;
 }
 
-/* ---------- static vintage texture overlays ---------- */
-body::before,body::after{
+/* =========  HEAVIER VINTAGE TEXTURE STACK  ========= */
+
+/* 1. parchment photo grain  */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background:url("https://images.unsplash.com/photo-1473862171626-5b5943c893dc?auto=format&fit=crop&w=1920&q=60") center/cover repeat;
+  mix-blend-mode:multiply;
+  opacity:.55;
+  filter:contrast(.85) brightness(.95);
+}
+
+/* 2. coffee rings & splatters (CSS radial-gradients)  */
+body::after{
   content:"";
   position:fixed;inset:0;
   pointer-events:none;
+  background:
+    radial-gradient(circle at 20% 35%, rgba(99,71,47,.22) 0 20%, transparent 55%),
+    radial-gradient(circle at 78% 18%, rgba(99,71,47,.18) 0 18%, transparent 55%),
+    radial-gradient(circle at 40% 82%, rgba(99,71,47,.15) 0 22%, transparent 60%),
+    radial-gradient(circle at 70% 68%, rgba(99,71,47,.1)  0 16%, transparent 55%),
+    radial-gradient(circle at 10% 78%, rgba(99,71,47,.12) 0 14%, transparent 50%);
   mix-blend-mode:multiply;
+  opacity:.5;
+  filter:blur(.5px);
 }
 
-/* paper grain + faint vignette */
-body::before{
-  background:
-    radial-gradient(circle at center,transparent 65%,rgba(0,0,0,.08) 100%),
-    url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAADUlEQVR4AWOgGDBgYGBgAAAANAAB0f8XGQAAAABJRU5ErkJggg==") repeat;
-  opacity:.28;
-  filter:blur(.4px);
+/* 3. vignette (darkened edges) */
+body::marker{
+  content:"";
+  position:fixed;inset:0;
+  pointer-events:none;
+  background:radial-gradient(circle at center, transparent 60%, rgba(0,0,0,.4) 100%);
+  mix-blend-mode:multiply;
+  opacity:.18;
 }
 
-/* subtle horizontal fold line + heavier specks */
-body::after{
-  background:
-    repeating-linear-gradient(90deg,transparent 0 4px,rgba(255,255,255,.06) 5px 6px,transparent 7px 14px),
-    radial-gradient(circle,rgba(0,0,0,.12) 1px,transparent 1px) 0 0/6px 6px;
-  opacity:.15;
-}
+/* ------------------------------------ */
 
-/* ---------- global elems ---------- */
 a{color:inherit;text-decoration:none}
 img{max-width:100%;display:block}
-
 .container{max-width:820px;margin:0 auto;padding:70px 32px}
 
-/* ---------- gothic title ---------- */
+/* title in black-letter */
 .title{
-  font-family:'UnifrakturCook','Gothic Ultra OT','Fraktur','Blackletter',serif;
-  font-size:3.6rem;
+  font-family:'UnifrakturCook','Gothic Ultra OT','Fraktur',serif;
+  font-size:3.8rem;
+  letter-spacing:.03em;
   line-height:1.1;
-  letter-spacing:.02em;
-  margin-bottom:10px;
-  text-shadow:1px 1px rgba(0,0,0,.08);
+  text-shadow:1px 1px rgba(0,0,0,.12);
+  margin-bottom:12px;
 }
 
-/* intro & section headings */
+/* headings & intro */
 .intro{max-width:540px;font-size:1.06rem;color:var(--grey);margin-bottom:74px}
 .section-title{
   font-family:'Spectral',serif;font-weight:600;font-size:1.45rem;margin:32px 0 26px;
 }
 
-/* ink fade on hover */
+/* hover ink fade */
 p,a,.member-name,.event-name,button{transition:color .3s}
 a:hover,.member-link:hover .member-name,.event-name:hover{color:var(--ink-soft)}
 
-/* ---------- members 2 × 2 ---------- */
+/* members (2 × 2) */
 .members-container{
   display:grid;grid-template-columns:repeat(2,1fr);gap:24px;margin-bottom:46px;
 }
 .member-link{
-  border:1px solid var(--border);border-radius:10px;padding:24px 22px;background:#fff9f1;transition:.35s;
+  border:1px solid var(--border);border-radius:10px;padding:24px 22px;background:#fffdf6;transition:.35s;
 }
-.member-link:hover{box-shadow:0 6px 18px rgba(0,0,0,.08);transform:translateY(-4px) rotate(-.25deg)}
+.member-link:hover{box-shadow:0 6px 22px rgba(0,0,0,.1);transform:translateY(-4px) rotate(-.25deg)}
 .member-name{font-weight:400;margin-bottom:8px}
 .member-bio{color:var(--grey);font-size:.93rem}
 
-/* ---------- gallery 2 × 2 postcard-landscape ---------- */
+/* gallery (2 × 2) */
 .gallery{
-  display:grid;grid-template-columns:repeat(2,1fr);gap:22px;
-  max-width:680px;margin:50px auto 100px;
+  display:grid;grid-template-columns:repeat(2,1fr);gap:22px;max-width:680px;margin:52px auto 102px;
 }
 .photo{
-  position:relative;overflow:hidden;border-radius:10px;border:1px solid var(--border);aspect-ratio:4/3;
+  position:relative;overflow:hidden;border:1px solid var(--border);border-radius:10px;aspect-ratio:4/3;
 }
 .photo img{
   width:100%;height:100%;object-fit:cover;object-position:center 55%;
-  filter:sepia(.24) contrast(.88) brightness(.92) saturate(.9);
-  transition:filter .5s ease,transform .5s ease;
+  filter:sepia(.28) contrast(.8) brightness(.9) saturate(.85);
+  transition:filter .55s ease,transform .55s ease;
 }
-.photo:hover img{filter:none;transform:scale(1.05)}
+.photo:hover img{filter:none;transform:scale(1.04)}
 .photo::after{
   content:"listen ↗";position:absolute;bottom:12px;right:14px;opacity:0;
-  background:rgba(0,0,0,.45);color:#fff;font:600 .8rem/1 'Spectral',serif;
+  background:rgba(0,0,0,.46);color:#fff;font:600 .78rem/1 'Spectral',serif;
   padding:4px 8px;border-radius:4px;letter-spacing:.04em;transition:.4s;
 }
 .photo:hover::after{opacity:1}
 
-/* ---------- events ---------- */
+/* events */
 .event-section h4{
   font-weight:400;margin-bottom:15px;color:var(--accent);text-transform:uppercase;font-size:.9rem;letter-spacing:.05em;
 }
 .event{margin-bottom:12px;font-size:.95rem;color:var(--grey)}
 .event-name{color:var(--ink);font-weight:400}
 
-/* ---------- footer ---------- */
+/* footer */
 .footer{text-align:center;margin-top:130px;padding-top:52px;border-top:1px solid var(--border)}
 .email-input{
   width:240px;background:none;border:none;border-bottom:1px solid var(--border);
@@ -137,10 +151,10 @@ a:hover,.member-link:hover .member-name,.event-name:hover{color:var(--ink-soft)}
 .email-button:hover{background:rgba(0,0,0,.05);border-color:var(--accent)}
 .footer-text{color:var(--grey);font-size:.8rem;margin-top:30px}
 
-/* ---------- mobile ---------- */
+/* mobile */
 @media(max-width:600px){
   .container{padding:60px 22px}
-  .title{font-size:2.7rem}
+  .title{font-size:2.9rem}
   .members-container{grid-template-columns:1fr}
   .gallery{gap:16px;max-width:100%}
   .email-input{width:180px;margin-bottom:14px}
@@ -214,7 +228,7 @@ a:hover,.member-link:hover .member-name,.event-name:hover{color:var(--ink-soft)}
       <h4>wild</h4>
       <div class="event"><span class="event-name">techno cave&nbsp;rave</span> — underground dance party</div>
       <div class="event"><span class="event-name">hitchhiking across california</span> — ride and die</div>
-      <div class="event"><span class="event-name">tidepooling</span> — “his own voice discovered and reaffirmed with astonishment the knowledge that all things are one thing and that one thing is all things—plankton, a shimmering phosphorescence on the sea and the spinning planets and an expanding universe, all bound together by the elastic string of time. It is advisable to look from the tidepool to the stars and then back to the tidepool again.” – John Steinbeck</div>
+      <div class="event"><span class="event-name">tidepooling</span> — “his own voice discovered and reaffirmed with astonishment the knowledge that all things are one thing and that one thing is all things—plankton, a shimmering phosphorescence on the sea and the spinning planets and an expanding universe, all bound together by the elastic string of time. It is advisable to look from the tidepool to the stars and then back to the tidepool again.” – Steinbeck</div>
     </div>
   </section>
 
