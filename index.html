@@ -32,37 +32,24 @@ body{
   overflow-x:hidden;
 }
 
-/* ---------- vintage motion overlays ---------- */
-body::before,body::after,body::marker{
-  content:"";
-  position:fixed;inset:0;
-  pointer-events:none;
+/* ---------- dynamic grain layers ---------- */
+.grain{
+  position:fixed;inset:0;pointer-events:none;
   mix-blend-mode:multiply;
+  background:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAADUlEQVR4AWOgGDBgYGBgAAAANAAB0f8XGQAAAABJRU5ErkJggg==") repeat;
+  animation: flicker 1.6s steps(2) infinite;
 }
-
-/* paper grain */
-body::before{
-  background:
-    linear-gradient(0deg,rgba(0,0,0,.02) 50%,transparent 50%) 0 0/4px 4px,
-    radial-gradient(circle,rgba(0,0,0,.03) 1px,transparent 1px) 0 0/3px 3px;
+.grain::after{          /* faint vertical scratches */
+  content:"";position:absolute;inset:0;
+  background:repeating-linear-gradient(90deg,transparent 0 6px,rgba(255,255,255,.06) 7px 8px,transparent 9px 17px);
+  mix-blend-mode:screen;opacity:.25;
 }
+.grain-slow{opacity:.12;filter:blur(.3px)}
+.grain-fast{opacity:.05;filter:blur(.6px)}
 
-/* drifting vertical scratches */
-body::after{
-  background:
-    url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAADUlEQVR4AWOgGDBgYGBgAAAANAAB0f8XGQAAAABJRU5ErkJggg==") repeat,
-    repeating-linear-gradient(90deg,transparent 0 6px,rgba(255,255,255,.06) 7px 8px,transparent 9px 17px);
-  opacity:.32;animation: scratches 24s linear infinite;
+@keyframes flicker{
+  50%{opacity:.9}
 }
-
-/* floating specks */
-body::marker{
-  background:radial-gradient(circle,rgba(0,0,0,.10) 1px,transparent 1px) 0 0/5px 5px;
-  opacity:.08;animation:specks 50s linear infinite;
-}
-
-@keyframes scratches{0%{transform:translateY(0)}100%{transform:translateY(-700px)}}
-@keyframes specks   {0%{transform:translate(0,0)}100%{transform:translate(600px,-600px)}}
 
 /* ---------- cursor dust ---------- */
 #cursor-noise{
@@ -73,7 +60,7 @@ body::marker{
   opacity:0;filter:blur(1px);
   transition:opacity .15s;
 }
-body:hover #cursor-noise{opacity:.35}
+body:hover #cursor-noise{opacity:.4}
 
 /* ---------- global elems ---------- */
 a{color:inherit;text-decoration:none}
@@ -94,12 +81,9 @@ img{max-width:100%;display:block}
 p,a,.member-name,.event-name,button{transition:color .3s}
 a:hover,.member-link:hover .member-name,.event-name:hover{color:var(--ink-soft)}
 
-/* ---------- members (fixed 2×2) ---------- */
+/* ---------- members 2 × 2 ---------- */
 .members-container{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:24px;
-  margin-bottom:46px;
+  display:grid;grid-template-columns:repeat(2,1fr);gap:24px;margin-bottom:46px;
 }
 .member-link{
   border:1px solid var(--border);border-radius:10px;padding:24px 22px;background:#fff9f1;transition:.35s;
@@ -108,7 +92,7 @@ a:hover,.member-link:hover .member-name,.event-name:hover{color:var(--ink-soft)}
 .member-name{font-weight:400;margin-bottom:8px}
 .member-bio{color:var(--grey);font-size:.93rem}
 
-/* ---------- gallery : 2×2 landscape ---------- */
+/* ---------- gallery 2 × 2 ---------- */
 .gallery{
   display:grid;grid-template-columns:repeat(2,1fr);gap:22px;
   max-width:680px;margin:50px auto 100px;
@@ -131,8 +115,7 @@ a:hover,.member-link:hover .member-name,.event-name:hover{color:var(--ink-soft)}
 
 /* ---------- events ---------- */
 .event-section h4{
-  font-weight:400;margin-bottom:15px;color:var(--accent);
-  text-transform:uppercase;font-size:.9rem;letter-spacing:.05em;
+  font-weight:400;margin-bottom:15px;color:var(--accent);text-transform:uppercase;font-size:.9rem;letter-spacing:.05em;
 }
 .event{margin-bottom:12px;font-size:.95rem;color:var(--grey)}
 .event-name{color:var(--ink);font-weight:400}
@@ -163,6 +146,11 @@ a:hover,.member-link:hover .member-name,.event-name:hover{color:var(--ink-soft)}
 </head>
 
 <body>
+
+<!-- dynamic grain layers -->
+<div class="grain grain-slow" id="grainSlow"></div>
+<div class="grain grain-fast" id="grainFast"></div>
+
 <div class="container">
 
   <!-- header -->
@@ -228,7 +216,7 @@ a:hover,.member-link:hover .member-name,.event-name:hover{color:var(--ink-soft)}
       <h4>wild</h4>
       <div class="event"><span class="event-name">techno cave&nbsp;rave</span> — underground dance party</div>
       <div class="event"><span class="event-name">hitchhiking across california</span> — ride and die</div>
-      <div class="event"><span class="event-name">tidepooling</span> — “his own voice discovered and reaffirmed with astonishment the knowledge that all things are one thing and that one thing is all things—plankton, a shimmering phosphorescence on the sea and the spinning planets and an expanding universe, all bound together by the elastic string of time. It is advisable to look from the tidepool to the stars and then back to the tidepool again.” – John Steinbeck</div>
+      <div class="event"><span class="event-name">tidepooling</span> — “his own voice discovered … look from the tidepool to the stars and then back to the tidepool again.” – Steinbeck</div>
     </div>
   </section>
 
@@ -243,16 +231,31 @@ a:hover,.member-link:hover .member-name,.event-name:hover{color:var(--ink-soft)}
 
 </div>
 
-<!-- cursor-noise element + tiny script -->
+<!-- cursor noise blob -->
 <div id="cursor-noise"></div>
+
 <script>
+/* cursor dust follows pointer */
 const dust=document.getElementById('cursor-noise');
-let t;
+let idle;
 document.addEventListener('mousemove',e=>{
   dust.style.transform=`translate(${e.clientX-60}px,${e.clientY-60}px)`;
-  dust.style.opacity='.35';
-  clearTimeout(t);
-  t=setTimeout(()=>dust.style.opacity='0',180); // fade out if idle
+  dust.style.opacity='.4';
+  clearTimeout(idle); idle=setTimeout(()=>dust.style.opacity='0',160);
+});
+
+/* scroll-reactive grain parallax */
+const slow=document.getElementById('grainSlow');
+const fast=document.getElementById('grainFast');
+const factorSlow=0.3, factorFast=0.7;
+window.addEventListener('scroll',()=>{
+  const y=window.scrollY;
+  slow.style.transform=`translateY(${y*factorSlow}px)`;
+  fast.style.transform=`translateY(-${y*factorFast}px)`;
+  /* optional opacity pulse */
+  const pulse=(Math.sin(y/300)+1)/8;  /* 0→.25 */
+  slow.style.opacity=.12+pulse;
+  fast.style.opacity=.05+pulse/2;
 });
 </script>
 </body>
