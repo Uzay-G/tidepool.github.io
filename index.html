@@ -1,274 +1,237 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>tidepool</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>tidepool</title>
 
-    <!--  vintage + modern font pairing  -->
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+<!-- vintage + modern font pairing -->
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Spectral:wght@300;400&display=swap" rel="stylesheet">
 
-    <style>
-        /* ----------  color palette  ---------- */
-        :root{
-            --bg      : #f8f3e9;   /* faded cream */
-            --ink     : #4b3a28;   /* dark sepia */
-            --accent  : #b7906d;   /* muted copper */
-            --grey    : #6f6f6f;
-            --border  : #d9d1c4;
-        }
+<style>
+/* ---------- palette ---------- */
+:root{
+  --bg      : #f7f1e3;  /* sun-bleached parchment */
+  --ink     : #463626;  /* desaturated dark brown */
+  --ink-soft: #625244;  /* hover fade */
+  --accent  : #b9956f;  /* copper */
+  --border  : #d7c9b8;
+  --grey    : #7a7a7a;
+}
 
-        /* ----------  reset  ---------- */
-        *{margin:0;padding:0;box-sizing:border-box;}
+/* ---------- reset ---------- */
+*,::before,::after{margin:0;padding:0;box-sizing:border-box}
 
-        /* ----------  base  ---------- */
-        body{
-            font:300 16px/1.7 'Inter', sans-serif;
-            background:var(--bg);
-            color:var(--ink);
-            /* grainy paper texture */
-            background-image:
-                linear-gradient(0deg,rgba(0,0,0,.02) 50%,transparent 50%),
-                radial-gradient(circle,rgba(0,0,0,.03) 1px,transparent 1px);
-            background-size:4px 4px,   3px 3px;
-        }
-        a{color:inherit;text-decoration:none;}
-        img{max-width:100%;display:block;}
+/* ---------- base ---------- */
+body{
+  font:300 16px/1.7 'Spectral', serif;
+  color:var(--ink);
+  background:var(--bg);
+  min-height:100vh;
+  overflow-x:hidden;
+}
 
-        .container{
-            max-width:780px;
-            margin:0 auto;
-            padding:60px 30px;
-        }
+/* grain + dust overlays (three layers) */
+body::before,body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  mix-blend-mode:multiply;
+}
 
-        /* ----------  headings  ---------- */
-        .title{
-            font-family:'Playfair Display',serif;
-            font-size:3.1rem;
-            font-weight:600;
-            letter-spacing:-.03em;
-            margin-bottom:6px;
-        }
-        .intro{
-            max-width:520px;
-            font-size:1.05rem;
-            color:var(--grey);
-            margin-bottom:70px;
-        }
-        .section-title{
-            font-family:'Playfair Display',serif;
-            font-size:1.45rem;
-            font-weight:600;
-            margin-bottom:28px;
-        }
+body::before{ /* paper grain */
+  background:
+    linear-gradient(0deg,rgba(0,0,0,.02) 50%,transparent 50%) 0 0/4px 4px,
+    radial-gradient(circle,rgba(0,0,0,.03) 1px,transparent 1px) 0 0/3px 3px;
+}
 
-        /* ----------  members  ---------- */
-        .members-container{
-            display:grid;
-            grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
-            gap:22px;
-            margin-bottom:40px;
-        }
-        .member-link{
-            border:1px solid var(--border);
-            border-radius:10px;
-            padding:22px 20px;
-            transition:.3s;
-            background:#fff9f1;
-        }
-        .member-link:hover{
-            box-shadow:0 6px 16px rgba(0,0,0,.08);
-            transform:translateY(-4px) rotate(-.3deg);
-        }
-        .member-name{
-            font-weight:400;
-            margin-bottom:8px;
-        }
-        .member-bio{
-            color:var(--grey);
-            font-size:.94rem;
-        }
+body::after{ /* dust & faint fold */
+  background:
+    url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAADUlEQVR4AWOgGDBgYGBgAAAANAAB0f8XGQAAAABJRU5ErkJggg==") repeat, /* tiny noise */
+    repeating-linear-gradient(90deg,transparent 0 5px,rgba(255,255,255,.08) 6px 7px,transparent 8px 13px) 0 0/100% 100%; /* fold */
+  opacity:.35;
+  animation: dustMove 22s linear infinite;
+}
 
-        /* ----------  photo gallery  ---------- */
-        .gallery{
-            display:grid;
-            grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-            gap:24px;
-            margin:40px 0 90px;
-        }
-        .photo{
-            position:relative;
-            overflow:hidden;
-            border-radius:12px;
-            border:1px solid var(--border);
-        }
-        .photo img{
-            width:100%;
-            height:100%;
-            object-fit:cover;
-            filter:sepia(.18) contrast(.9) brightness(.95);
-            transition:.4s;
-        }
-        .photo:hover img{
-            filter:none;
-            transform:scale(1.04);
-        }
-        .photo.landscape{
-            aspect-ratio: 3 / 2;   /* or 16 / 9 if that matches the shot better */
-        }
+/* drifting film specks */
+@keyframes dustMove{
+  0%{transform:translateY(0)}
+  100%{transform:translateY(-600px)}
+}
 
-        /* soft caption on hover */
-        .photo::after{
-            content:"listen ↗";
-            position:absolute;
-            bottom:10px; right:14px;
-            font:600 .8rem/1 'Inter',sans-serif;
-            letter-spacing:.05em;
-            color:#fff;
-            background:rgba(0,0,0,.42);
-            padding:3px 7px;
-            border-radius:4px;
-            opacity:0;
-            transition:.4s;
-        }
-        .photo:hover::after{opacity:1;}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
 
-        /* ----------  events  ---------- */
-        .event-section h4{
-            font-weight:400;
-            margin-bottom:16px;
-            color:var(--accent);
-            text-transform:uppercase;
-            font-size:.9rem;
-            letter-spacing:.04em;
-        }
-        .event{margin-bottom:12px;font-size:.95rem;color:var(--grey);}
-        .event-name{color:var(--ink);font-weight:400;}
+.container{max-width:800px;margin:0 auto;padding:70px 32px}
 
-        /* ----------  footer  ---------- */
-        .footer{
-            text-align:center;
-            margin-top:120px;
-            padding-top:50px;
-            border-top:1px solid var(--border);
-        }
-        .email-input{
-            font-family:'Inter',sans-serif;
-            width:240px;
-            background:none;
-            border:none;
-            border-bottom:1px solid var(--border);
-            padding:9px 0;
-            font-size:.95rem;
-            transition:.3s;
-            color:var(--ink);
-        }
-        .email-input:focus{border-bottom-color:var(--accent);outline:none;}
-        .email-button{
-            background:none;
-            border:1px solid var(--border);
-            padding:8px 20px;
-            font-size:.9rem;
-            margin-left:12px;
-            cursor:pointer;
-            transition:.3s;
-        }
-        .email-button:hover{
-            background:rgba(0,0,0,.04);
-            border-color:var(--accent);
-        }
-        .footer-text{color:var(--grey);font-size:.82rem;margin-top:30px;}
+/* ---------- headings ---------- */
+.title{
+  font-family:'Playfair Display',serif;
+  font-size:3.2rem;
+  letter-spacing:-.03em;
+  margin-bottom:8px;
+}
+.intro{
+  max-width:540px;font-size:1.06rem;color:var(--grey);margin-bottom:74px;
+}
+.section-title{
+  font-family:'Playfair Display',serif;font-size:1.48rem;font-weight:600;margin:32px 0 26px;
+}
 
-        /* ----------  mobile tweaks  ---------- */
-        @media(max-width:600px){
-            .container{padding:50px 22px;}
-            .title{font-size:2.4rem;}
-            .gallery{grid-template-columns:1fr;}
-            .email-input{width:180px;margin-bottom:14px;}
-        }
-    </style>
+/* subtle ink unevenness */
+p,a,.member-name,.event-name,button{
+  transition:color .3s;
+}
+a:hover,.member-link:hover .member-name,.event-name:hover{
+  color:var(--ink-soft);
+}
+
+/* ---------- members ---------- */
+.members-container{
+  display:grid;gap:24px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));margin-bottom:46px;
+}
+.member-link{
+  border:1px solid var(--border);border-radius:10px;padding:24px 22px;background:#fff9f1;transition:.35s;
+}
+.member-link:hover{box-shadow:0 6px 18px rgba(0,0,0,.08);transform:translateY(-4px) rotate(-.25deg)}
+.member-name{font-weight:400;margin-bottom:8px}
+.member-bio{color:var(--grey);font-size:.93rem}
+
+/* ---------- gallery ---------- */
+.gallery{
+  display:grid;gap:26px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));margin:42px 0 92px;
+}
+.photo{
+  position:relative;overflow:hidden;border-radius:12px;border:1px solid var(--border);
+}
+.photo img{
+  width:100%;height:100%;object-fit:cover;
+  filter:sepia(.28) contrast(.85) brightness(.9) saturate(.9);
+  transition:filter .5s ease,transform .5s ease;
+}
+.photo img{animation:fadeIn 1.4s forwards}
+@keyframes fadeIn{from{opacity:0;filter:sepia(.7) contrast(.7) brightness(.5)}to{opacity:1}}
+.photo:hover img{filter:none;transform:scale(1.05)}
+.photo::after{
+  content:"listen ↗";position:absolute;bottom:12px;right:16px;border-radius:4px;
+  font:600 .8rem/1 'Spectral',serif;letter-spacing:.04em;padding:3px 8px;
+  background:rgba(0,0,0,.42);color:#fff;opacity:0;transition:.4s;
+}
+.photo:hover::after{opacity:1}
+.photo.landscape{aspect-ratio:3/2}
+
+/* ---------- events ---------- */
+.event-section h4{
+  font-weight:400;margin-bottom:15px;color:var(--accent);text-transform:uppercase;font-size:.9rem;letter-spacing:.05em;
+}
+.event{margin-bottom:12px;font-size:.95rem;color:var(--grey)}
+.event-name{color:var(--ink);font-weight:400}
+
+/* ---------- footer ---------- */
+.footer{text-align:center;margin-top:130px;padding-top:52px;border-top:1px solid var(--border)}
+.email-input{
+  width:240px;background:none;border:none;border-bottom:1px solid var(--border);
+  padding:9px 0;font-size:.95rem;font-family:'Spectral',serif;color:var(--ink);transition:.3s;
+}
+.email-input:focus{border-bottom-color:var(--accent);outline:none}
+.email-button{
+  background:none;border:1px solid var(--border);padding:8px 20px;font-size:.88rem;margin-left:12px;
+  cursor:pointer;transition:.3s;font-family:'Spectral',serif;
+}
+.email-button:hover{background:rgba(0,0,0,.05);border-color:var(--accent)}
+.footer-text{color:var(--grey);font-size:.8rem;margin-top:30px}
+
+/* ---------- mobile ---------- */
+@media(max-width:600px){
+  .container{padding:60px 22px}
+  .title{font-size:2.5rem}
+  .gallery{grid-template-columns:1fr}
+  .email-input{width:180px;margin-bottom:14px}
+}
+</style>
 </head>
+
 <body>
-    <div class="container">
-        <!--  header  -->
-        <header>
-            <h1 class="title">tidepool</h1>
-            <p class="intro">a house in san&nbsp;francisco — where the calm waters meet the crashing waves</p>
-        </header>
+<div class="container">
 
-        <!--  members  -->
-        <section class="section">
-            <h2 class="section-title">who we are</h2>
-            <div class="members-container">
-                <a href="https://uzpg.me"      target="_blank" class="member-link">
-                    <div class="member-name">uzay</div>
-                    <div class="member-bio">“so many colors. this is making me think. fuck.”</div>
-                </a>
-                <a href="https://kushalthaman.github.io" target="_blank" class="member-link">
-                    <div class="member-name">kushal</div>
-                    <div class="member-bio">“i cooka da pasta”</div>
-                </a>
-                <a href="https://kaivu.org"    target="_blank" class="member-link">
-                    <div class="member-name">kaivu</div>
-                    <div class="member-bio">“find some time to do something”</div>
-                </a>
-                <a href="https://nilsand.re"   target="_blank" class="member-link">
-                    <div class="member-name">nils</div>
-                    <div class="member-bio">“please don't let an adult see this website”</div>
-                </a>
-            </div>
-        </section>
+  <!-- header -->
+  <header>
+    <h1 class="title">tidepool</h1>
+    <p class="intro">a house in san&nbsp;francisco — where calm waters meet crashing waves.</p>
+  </header>
 
-        <!--  photo‑song gallery  -->
-        <section class="section">
-            <h2 class="section-title"></h2>
-            <div class="gallery">
-                <!-- replace # with your actual song links -->
-                <a class="photo" href="https://open.spotify.com/track/52Bg6oaos7twR7IUtEpqcE?si=c49a0aedbc5d413c" target="_blank">
-                    <img src="/tidepool_1.webp"  alt="tidepool 1">
-                </a>
-                <a class="photo" href="https://open.spotify.com/track/3k49y7zmi55sp9zv531Z2M?si=f9e71c7b70ca47bf" target="_blank">
-                    <img src="/tidepool_2.jpg"   alt="tidepool 2">
-                </a>
-                <a class="photo landscape" href="https://open.spotify.com/track/2cGxRwrMyEAp8dEbuZaVv6?si=cd59f69a299f42ec" target="_blank">
-                    <img src="/tidepool_3.jpg"   alt="tidepool 3">
-                </a>
-                <a class="photo" href="https://open.spotify.com/track/4ZbEaG8Hs4StrkTR1E7o90?si=bac5e4c084184602" target="_blank">
-                    <img src="/tidepool_4.jpg"   alt="tidepool 4">
-                </a>
-            </div>
-        </section>
-
-        <!--  events  -->
-        <section class="section">
-            <h2 class="section-title">what we're up&nbsp;to</h2>
-
-            <div class="event-section">
-                <h4>chill</h4>
-                <div class="event"><span class="event-name">sunday dinners</span> — shared meals cooked together</div>
-                <div class="event"><span class="event-name">poetry &amp; tea</span> — writing sessions with genmaicha</div>
-                <div class="event"><span class="event-name">movie nights</span> — cozy evenings, good films</div>
-                <div class="event"><span class="event-name">whaling</span> — sunsets + whale&nbsp;talk</div>
-            </div>
-
-            <div class="event-section">
-                <h4>wild</h4>
-                <div class="event"><span class="event-name">techno cave rave</span> — underground dance party</div>
-                <div class="event"><span class="event-name">whaling</span> — sunsets + whale&nbsp;talk</div>
-            </div>
-        </section>
-
-        <!--  footer  -->
-        <footer class="footer">
-            <div class="email-signup">
-                <input type="email" class="email-input" placeholder="your email">
-                <button class="email-button">join us</button>
-            </div>
-            <div class="footer-text">
-                tidepool · sf · summer&nbsp;2025<br>∿
-            </div>
-        </footer>
+  <!-- members -->
+  <section>
+    <h2 class="section-title">who we are</h2>
+    <div class="members-container">
+      <a href="https://uzpg.me" target="_blank" class="member-link">
+        <div class="member-name">uzay</div>
+        <div class="member-bio">“so many colors. this is making me think. fuck.”</div>
+      </a>
+      <a href="https://cs.stanford.edu/~kushalt" target="_blank" class="member-link">
+        <div class="member-name">kushal</div>
+        <div class="member-bio">“blessed are the cracked, for they let the light in.”</div>
+      </a>
+      <a href="https://kaivu.org" target="_blank" class="member-link">
+        <div class="member-name">kaivu</div>
+        <div class="member-bio">“find some time to do something”</div>
+      </a>
+      <a href="https://nilsand.re" target="_blank" class="member-link">
+        <div class="member-name">nils</div>
+        <div class="member-bio">“please don't let an adult see this website”</div>
+      </a>
     </div>
+  </section>
+
+  <!-- gallery -->
+  <section>
+    <div class="wall">
+      <a class="photo" href="https://open.spotify.com/track/52Bg6oaos7twR7IUtEpqcE?si=c49a0aedbc5d413c" target="_blank">
+        <img src="/tidepool_1.webp" alt="tidepool 1">
+      </a>
+      <a class="photo landscape" href="https://open.spotify.com/track/2cGxRwrMyEAp8dEbuZaVv6?si=cd59f69a299f42ec" target="_blank">
+        <img src="/tidepool_3.jpg" alt="tidepool 3">
+      </a>
+      <a class="photo" href="https://open.spotify.com/track/4ZbEaG8Hs4StrkTR1E7o90?si=bac5e4c084184602" target="_blank">
+        <img src="/tidepool_4.jpg" alt="tidepool 4">
+      </a>
+      <a class="photo" href="https://open.spotify.com/track/3k49y7zmi55sp9zv531Z2M?si=f9e71c7b70ca47bf" target="_blank">
+        <img src="/tidepool_2.jpg" alt="tidepool 2">
+      </a>
+    </div>
+  </section>
+
+  <!-- events -->
+  <section>
+    <h2 class="section-title">what we're up&nbsp;to</h2>
+
+    <div class="event-section">
+      <h4>chill</h4>
+      <div class="event"><span class="event-name">sunday dinners</span> — shared meals cooked together</div>
+      <div class="event"><span class="event-name">poetry &amp; tea</span> — book clubs and writing sessions with genmaicha</div>
+      <div class="event"><span class="event-name">movie nights</span> — cozy evenings on the couch</div>
+      <div class="event"><span class="event-name">planespotting</span> — sunsets + plane&nbsp;talk</div>
+    </div>
+
+    <div class="event-section">
+      <h4>wild</h4>
+      <div class="event"><span class="event-name">techno cave&nbsp;rave</span> — underground dance party</div>
+      <div class="event"><span class="event-name">hitchhiking across california</span> — ride and die</div>
+      <div class="event"><span class="event-name">tidepooling</span> — “It is advisable to look from the tidepool to the stars and then back to the tidepool again.” - John Steinbeck</div>
+    </div>
+  </section>
+
+  <!-- footer -->
+  <footer class="footer">
+    <div class="email-signup">
+      <input type="email" class="email-input" placeholder="your email">
+      <button class="email-button">join us</button>
+    </div>
+    <div class="footer-text">tidepool · sf · summer 2025<br>∿</div>
+  </footer>
+
+</div>
 </body>
 </html>
