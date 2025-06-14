@@ -114,6 +114,10 @@
             filter:none;
             transform:scale(1.04);
         }
+        .photo.landscape{
+            aspect-ratio: 3 / 2;   /* or 16 / 9 if that matches the shot better */
+        }
+
         /* soft caption on hover */
         .photo::after{
             content:"listen ↗";
@@ -227,7 +231,7 @@
                 <a class="photo" href="https://open.spotify.com/track/3k49y7zmi55sp9zv531Z2M?si=f9e71c7b70ca47bf" target="_blank">
                     <img src="/tidepool_2.jpg"   alt="tidepool 2">
                 </a>
-                <a class="photo" href="https://open.spotify.com/track/2cGxRwrMyEAp8dEbuZaVv6?si=cd59f69a299f42ec" target="_blank">
+                <a class="photo landscape" href="https://open.spotify.com/track/2cGxRwrMyEAp8dEbuZaVv6?si=cd59f69a299f42ec" target="_blank">
                     <img src="/tidepool_3.jpg"   alt="tidepool 3">
                 </a>
                 <a class="photo" href="https://open.spotify.com/track/4ZbEaG8Hs4StrkTR1E7o90?si=bac5e4c084184602" target="_blank">
@@ -262,7 +266,7 @@
                 <button class="email-button">join us</button>
             </div>
             <div class="footer-text">
-                tidepool · sf · summer&nbsp;2024<br>∿
+                tidepool · sf · summer&nbsp;2025<br>∿
             </div>
         </footer>
     </div>
