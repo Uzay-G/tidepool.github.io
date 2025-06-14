@@ -12,18 +12,18 @@
 <style>
 /* ---------- palette ---------- */
 :root{
-  --bg      : #f7f1e3;  /* sun-bleached parchment */
-  --ink     : #463626;  /* desaturated dark brown */
-  --ink-soft: #625244;  /* hover fade */
-  --accent  : #b9956f;  /* copper */
+  --bg      : #f7f1e3;
+  --ink     : #463626;
+  --ink-soft: #625244;
+  --accent  : #b9956f;
   --border  : #d7c9b8;
   --grey    : #7a7a7a;
 }
 
-/* ---------- reset ---------- */
+/* reset */
 *,::before,::after{margin:0;padding:0;box-sizing:border-box}
 
-/* ---------- base ---------- */
+/* base */
 body{
   font:300 16px/1.7 'Spectral', serif;
   color:var(--ink);
@@ -32,63 +32,42 @@ body{
   overflow-x:hidden;
 }
 
-/* grain + dust overlays (three layers) */
+/* grain + dust overlays */
 body::before,body::after{
-  content:"";
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  mix-blend-mode:multiply;
+  content:"";position:fixed;inset:0;pointer-events:none;mix-blend-mode:multiply;
 }
-
-body::before{ /* paper grain */
+body::before{
   background:
     linear-gradient(0deg,rgba(0,0,0,.02) 50%,transparent 50%) 0 0/4px 4px,
     radial-gradient(circle,rgba(0,0,0,.03) 1px,transparent 1px) 0 0/3px 3px;
 }
-
-body::after{ /* dust & faint fold */
+body::after{
   background:
-    url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAADUlEQVR4AWOgGDBgYGBgAAAANAAB0f8XGQAAAABJRU5ErkJggg==") repeat, /* tiny noise */
-    repeating-linear-gradient(90deg,transparent 0 5px,rgba(255,255,255,.08) 6px 7px,transparent 8px 13px) 0 0/100% 100%; /* fold */
-  opacity:.35;
-  animation: dustMove 22s linear infinite;
+    url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAADUlEQVR4AWOgGDBgYGBgAAAANAAB0f8XGQAAAABJRU5ErkJggg==") repeat,
+    repeating-linear-gradient(90deg,transparent 0 5px,rgba(255,255,255,.08) 6px 7px,transparent 8px 13px);
+  opacity:.35;animation:dustMove 22s linear infinite;
 }
-
-/* drifting film specks */
-@keyframes dustMove{
-  0%{transform:translateY(0)}
-  100%{transform:translateY(-600px)}
-}
+@keyframes dustMove{0%{transform:translateY(0)}100%{transform:translateY(-600px)}}
 
 a{color:inherit;text-decoration:none}
 img{max-width:100%;display:block}
 
 .container{max-width:800px;margin:0 auto;padding:70px 32px}
 
-/* ---------- headings ---------- */
+/* headings */
 .title{
-  font-family:'Playfair Display',serif;
-  font-size:3.2rem;
-  letter-spacing:-.03em;
-  margin-bottom:8px;
+  font-family:'Playfair Display',serif;font-size:3.2rem;letter-spacing:-.03em;margin-bottom:8px;
 }
-.intro{
-  max-width:540px;font-size:1.06rem;color:var(--grey);margin-bottom:74px;
-}
+.intro{max-width:540px;font-size:1.06rem;color:var(--grey);margin-bottom:74px}
 .section-title{
   font-family:'Playfair Display',serif;font-size:1.48rem;font-weight:600;margin:32px 0 26px;
 }
 
-/* subtle ink unevenness */
-p,a,.member-name,.event-name,button{
-  transition:color .3s;
-}
-a:hover,.member-link:hover .member-name,.event-name:hover{
-  color:var(--ink-soft);
-}
+/* ink fade */
+p,a,.member-name,.event-name,button{transition:color .3s}
+a:hover,.member-link:hover .member-name,.event-name:hover{color:var(--ink-soft)}
 
-/* ---------- members ---------- */
+/* members */
 .members-container{
   display:grid;gap:24px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));margin-bottom:46px;
 }
@@ -99,37 +78,35 @@ a:hover,.member-link:hover .member-name,.event-name:hover{
 .member-name{font-weight:400;margin-bottom:8px}
 .member-bio{color:var(--grey);font-size:.93rem}
 
-/* ---------- gallery ---------- */
+/* gallery — fixed 2×2 grid */
 .gallery{
-  display:grid;gap:26px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));margin:42px 0 92px;
+  display:grid;grid-template-columns:repeat(2,1fr);gap:16px;
+  max-width:460px;margin:42px auto 92px; /* centered, compact */
 }
 .photo{
-  position:relative;overflow:hidden;border-radius:12px;border:1px solid var(--border);
+  position:relative;overflow:hidden;border-radius:10px;border:1px solid var(--border);aspect-ratio:1/1;
 }
 .photo img{
   width:100%;height:100%;object-fit:cover;
   filter:sepia(.28) contrast(.85) brightness(.9) saturate(.9);
   transition:filter .5s ease,transform .5s ease;
 }
-.photo img{animation:fadeIn 1.4s forwards}
-@keyframes fadeIn{from{opacity:0;filter:sepia(.7) contrast(.7) brightness(.5)}to{opacity:1}}
 .photo:hover img{filter:none;transform:scale(1.05)}
 .photo::after{
-  content:"listen ↗";position:absolute;bottom:12px;right:16px;border-radius:4px;
-  font:600 .8rem/1 'Spectral',serif;letter-spacing:.04em;padding:3px 8px;
-  background:rgba(0,0,0,.42);color:#fff;opacity:0;transition:.4s;
+  content:"listen ↗";position:absolute;bottom:10px;right:12px;opacity:0;
+  background:rgba(0,0,0,.42);color:#fff;font:600 .78rem/1 'Spectral',serif;
+  padding:3px 7px;border-radius:4px;letter-spacing:.04em;transition:.4s;
 }
 .photo:hover::after{opacity:1}
-.photo.landscape{aspect-ratio:3/2}
 
-/* ---------- events ---------- */
+/* events */
 .event-section h4{
   font-weight:400;margin-bottom:15px;color:var(--accent);text-transform:uppercase;font-size:.9rem;letter-spacing:.05em;
 }
 .event{margin-bottom:12px;font-size:.95rem;color:var(--grey)}
 .event-name{color:var(--ink);font-weight:400}
 
-/* ---------- footer ---------- */
+/* footer */
 .footer{text-align:center;margin-top:130px;padding-top:52px;border-top:1px solid var(--border)}
 .email-input{
   width:240px;background:none;border:none;border-bottom:1px solid var(--border);
@@ -143,11 +120,12 @@ a:hover,.member-link:hover .member-name,.event-name:hover{
 .email-button:hover{background:rgba(0,0,0,.05);border-color:var(--accent)}
 .footer-text{color:var(--grey);font-size:.8rem;margin-top:30px}
 
-/* ---------- mobile ---------- */
+/* mobile */
 @media(max-width:600px){
   .container{padding:60px 22px}
   .title{font-size:2.5rem}
-  .gallery{grid-template-columns:1fr}
+  /* still 2×2 on phones; comment next line to drop to 1×4 if preferred */
+  .gallery{grid-template-columns:repeat(2,1fr)}
   .email-input{width:180px;margin-bottom:14px}
 }
 </style>
@@ -168,30 +146,30 @@ a:hover,.member-link:hover .member-name,.event-name:hover{
     <div class="members-container">
       <a href="https://uzpg.me" target="_blank" class="member-link">
         <div class="member-name">uzay</div>
-        <div class="member-bio">“so many colors. this is making me think. fuck.”</div>
+        <div class="member-bio">so many colors. this is making me think. fuck.</div>
       </a>
       <a href="https://cs.stanford.edu/~kushalt" target="_blank" class="member-link">
         <div class="member-name">kushal</div>
-        <div class="member-bio">“blessed are the cracked, for they let the light in.”</div>
+        <div class="member-bio">blessed are the cracked, for they let the light in.</div>
       </a>
       <a href="https://kaivu.org" target="_blank" class="member-link">
         <div class="member-name">kaivu</div>
-        <div class="member-bio">“find some time to do something”</div>
+        <div class="member-bio">find some time to do something</div>
       </a>
       <a href="https://nilsand.re" target="_blank" class="member-link">
         <div class="member-name">nils</div>
-        <div class="member-bio">“please don't let an adult see this website”</div>
+        <div class="member-bio">please don't let an adult see this website</div>
       </a>
     </div>
   </section>
 
   <!-- gallery -->
   <section>
-    <div class="wall">
+    <div class="gallery">
       <a class="photo" href="https://open.spotify.com/track/52Bg6oaos7twR7IUtEpqcE?si=c49a0aedbc5d413c" target="_blank">
         <img src="/tidepool_1.webp" alt="tidepool 1">
       </a>
-      <a class="photo landscape" href="https://open.spotify.com/track/2cGxRwrMyEAp8dEbuZaVv6?si=cd59f69a299f42ec" target="_blank">
+      <a class="photo" href="https://open.spotify.com/track/2cGxRwrMyEAp8dEbuZaVv6?si=cd59f69a299f42ec" target="_blank">
         <img src="/tidepool_3.jpg" alt="tidepool 3">
       </a>
       <a class="photo" href="https://open.spotify.com/track/4ZbEaG8Hs4StrkTR1E7o90?si=bac5e4c084184602" target="_blank">
@@ -200,13 +178,13 @@ a:hover,.member-link:hover .member-name,.event-name:hover{
       <a class="photo" href="https://open.spotify.com/track/3k49y7zmi55sp9zv531Z2M?si=f9e71c7b70ca47bf" target="_blank">
         <img src="/tidepool_2.jpg" alt="tidepool 2">
       </a>
+
     </div>
   </section>
 
   <!-- events -->
   <section>
     <h2 class="section-title">what we're up&nbsp;to</h2>
-
     <div class="event-section">
       <h4>chill</h4>
       <div class="event"><span class="event-name">sunday dinners</span> — shared meals cooked together</div>
