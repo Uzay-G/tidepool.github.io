@@ -79,44 +79,51 @@ a:hover,.member-link:hover .member-name,.event-name:hover{color:var(--ink-soft)}
 .member-bio{color:var(--grey);font-size:.93rem}
 
 /* gallery — 2 × 2 grid, preserves aspect ratio */
+<!----- inside your <style> block, replace ONLY the gallery rules ----->
+
+/* gallery — roomy 2×2 landscape grid */
 .gallery{
   display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:16px;
-  max-width:540px;        /* a bit wider than before so photos breathe */
-  margin:42px auto 92px;  /* centered */
+  grid-template-columns:repeat(2,1fr);
+  gap:18px;                         /* a hair more breathing room  */
+  max-width:620px;                  /* wider than before           */
+  margin:48px auto 100px;           /* still centered              */
 }
 .photo{
   position:relative;
   overflow:hidden;
   border-radius:10px;
   border:1px solid var(--border);
+  aspect-ratio:3/2;                 /* landscape slide vibe        */
 }
-
-/* just scale down, no forced square ⇒ natural proportions */
 .photo img{
   width:100%;
-  height:auto;            /* keeps original aspect ratio */
-  display:block;
-  filter:sepia(.28) contrast(.85) brightness(.9) saturate(.9);
+  height:100%;
+  object-fit:cover;                 /* mild crop, now less severe  */
+  object-position:center 50%;
+  filter:sepia(.24) contrast(.88) brightness(.92) saturate(.9);
   transition:filter .5s ease,transform .5s ease;
 }
-.photo:hover img{filter:none;transform:scale(1.03)}
-
+.photo:hover img{filter:none;transform:scale(1.06)}
 .photo::after{
   content:"listen ↗";
   position:absolute;
-  bottom:10px;right:12px;
+  bottom:12px;right:14px;
   opacity:0;
   background:rgba(0,0,0,.42);
   color:#fff;
-  font:600 .78rem/1 'Spectral',serif;
-  padding:3px 7px;
+  font:600 .8rem/1 'Spectral',serif;
+  padding:4px 8px;
   border-radius:4px;
   letter-spacing:.04em;
   transition:.4s;
 }
 .photo:hover::after{opacity:1}
+
+/* mobile tweak: still two-up but fits nicely */
+@media(max-width:600px){
+  .gallery{max-width:100%;gap:14px}
+}
 
 /* events */
 .event-section h4{
